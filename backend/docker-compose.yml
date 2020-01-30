@@ -1,0 +1,31 @@
+version: '3.7'
+
+services: 
+    blog:
+        build: 
+            context: .
+            target: development
+        command: npx nodemon app.js
+        depends_on: 
+            - db
+        ports: 
+            - '9000:9000'
+        volumes: 
+            - .:/usr/blog
+            - blog_node_modules:/usr/blog/node_modules
+        tty: true
+        environment:
+          - PGHOST=db
+          - PGUSER=postgres
+    pgadmin:
+      image: dpage/pgadmin4
+      ports:
+        - "5050:80"
+      environment:
+        PGADMIN_DEFAULT_EMAIL: admin
+        PGADMIN_DEFAULT_PASSWORD: admin
+    db:
+      image: postgres:12
+volumes: 
+    blog_node_modules:
+
